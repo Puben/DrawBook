@@ -1,162 +1,80 @@
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <!--<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--Tilføj nødvendige dependencies (firebase, jquery, angularjs, angularfire, stylesheet)-->
-<head>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-  <!-- Firebase-->
-  <script src="scripts/firebase.js"></script>
-  
-  <!-- JQuery -->
-  <script src="scripts/jquery.min.js"></script>
-  
-  <!-- AngularJS-->
-  <script src="scripts/angular.min.js"></script>
-  
-  <!-- AngularFire-->
-  <script src="https://cdn.firebase.com/libs/angularfire/0.9.0/angularfire.min.js"></script>
-  
-  <!--Tilføj CSS-stylesheet -->  
-  <link rel="stylesheet" type="text/css" href="resources/css/example.css">
-  
-</head>
+        <!--<link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 
-<body id="background">
+        <!--Tilføj nødvendige dependencies (firebase, jquery, angularjs, angularfire, stylesheet)-->
+        <!-- Firebase-->
+        <script src="js/firebase.js"></script>
 
-<!--Angular 2-vejs-binding eksempel-->
-<div ng-app="" ng-controller="sessionController">
-  <p>First Name: <input type="text" ng-model="firstName"></p>
-  <p>Last Name: <input type="text" ng-model="lastName"></p>
-  <br>
-  Goddag, {{firstName + " " + lastName}}
-</div>
+        <!-- JQuery -->
+        <script src="js/jquery.min.js"></script>
 
-<!-- Nedenstående er vel egentlig en form for test, der kan skrive statisk data til databasen? -->
-<script>	
-	// Tilføj en reference til session handleren. En FireBase-db skal refereres til her.
-	var sessionHandlerRef = new Firebase('https://sessionhandler-db.firebaseio.com/');
-	
-	function sessionController($scope) {
-	
-	// Statisk tilføjelse af data til seperat FireBase-db ses her!
-	var usersRef = sessionHandlerRef.child("users");
-	
-	usersRef.set({
-		sessionone: {
-		firstName: "Session",
-		lastName: "One"
-		},
-		
-		sessiontwo: {
-		firstName: "Session",
-		lastName: "Two"
-		}
-				});
-	
-	}
-	
+        <!-- AngularJS-->
+        <script src="js/angular.min.js"></script>
 
-</script>
+        <!-- AngularFire-->
+        <script src="https://cdn.firebase.com/libs/angularfire/0.9.0/angularfire.min.js"></script>
 
-<!--Clear knap: Tømmer canvas -->
-<a id="clear">Clear Canvas</a>
+        <!--Tilføj CSS-stylesheet -->
+        <link rel="stylesheet" type="text/css" href="css/example.css">
+    </head>
+    <body id="background">
 
-<div class="l-demo-container">
-  <canvas id="drawing-canvas" width="960" height="600"></canvas>
-</div>
-<div id="colorholder">
-</div>
+        <!--Angular 2-vejs-binding eksempel-->
+        <div ng-app="" ng-controller="sessionController">
+            <p>First Name: <input type="text" ng-model="firstName"></p>
+            <p>Last Name: <input type="text" ng-model="lastName"></p>
+            <br>
+            Goddag, {{firstName + " " + lastName}}
+        </div>
 
-<script>
-  $(document).ready(function () {
-    //Globale variable - Vi skal have gjort det her dynamisk!
-    var pixSize = 2, lastPoint = null, currentColor = "f05", mouseDown = 0;
+        <!--Clear knap: Tømmer canvas -->
+        <a id="clear">Clear Canvas</a>
 
-	// Tilføj en reference til pixel-dataen for vores tegning. FireBase-backenden skal refereres her.
-    var pixelDataRef = new Firebase('https://radiant-inferno-4299.firebaseio.com/');
+        <div class="l-demo-container">
+            <canvas id="canvas" width="960" height="600"></canvas>
+        </div>
+        <div id="colorholder"></div><div id="sizeholder"></div>
 
-    // Sæt lærred op-
-    var myCanvas = document.getElementById('drawing-canvas');
-    var myContext = myCanvas.getContext ? myCanvas.getContext('2d') : null;
-	// Er vores context == null, er HTML5 ikke understøttet af browseren
-    if (myContext == null) {
-      alert("You must use a browser that supports HTML5 Canvas to run this demo.");
-      return;
-    }
-	
-	// Tilføj handler til at rydde lærredet
-	$('#clear').click(function() {
-	$('#drawing-canvas').get(0).getContext('2d').clearRect(0, 0, 100, 150);
-	pixelDataRef.set(null);
-	}); 
+        <script type="text/javascript" src="js/main.js"></script>
 
-    //Her bygger vi color-pickeren
-    var colors = ["fff","000","f00","0f0","00f","88f","f8d","f88","f05","f80","0f8","cf0","08f","408","ff8","8ff"];
-    for (c in colors) {
-      var item = $('<div/>').css("background-color", '#' + colors[c]).addClass("colorbox");
-      item.click((function () {
-        var col = colors[c];
-        return function () {
-          currentColor = col;
-        };
-      })());
-      item.appendTo('#colorholder');
-    }
 
-    //Hold styr på om museknappen holdes nede eller ej
-    myCanvas.onmousedown = function () {mouseDown = 1;};
-    myCanvas.onmouseout = myCanvas.onmouseup = function () {
-      mouseDown = 0; lastPoint = null;
-    };
 
-    //Draw a line from the mouse's last position to its current position
-    var drawLineOnMouseMove = function(e) {
-      if (!mouseDown) return;
+    <!-- Nedenstående er vel egentlig en form for test, der kan skrive statisk data til databasen? -->
+        <!--[if lt IE 7]>
+            <!--<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
-      e.preventDefault();
+        <!-- Add your site or application content here -->
+        <!--<p>Hello world! This is HTML5 Boilerplate.</p>
 
-      // Bresenham's line algorithm. We use this to ensure smooth lines are drawn
-      var offset = $('canvas').offset();
-      var x1 = Math.floor((e.pageX - offset.left) / pixSize - 1),
-        y1 = Math.floor((e.pageY - offset.top) / pixSize - 1);
-      var x0 = (lastPoint == null) ? x1 : lastPoint[0];
-      var y0 = (lastPoint == null) ? y1 : lastPoint[1];
-      var dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
-      var sx = (x0 < x1) ? 1 : -1, sy = (y0 < y1) ? 1 : -1, err = dx - dy;
-      while (true) {
-        //write the pixel into Firebase, or if we are drawing white, remove the pixel
-        pixelDataRef.child(x0 + ":" + y0).set(currentColor === "fff" ? null : currentColor);
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
 
-        if (x0 == x1 && y0 == y1) break;
-        var e2 = 2 * err;
-        if (e2 > -dy) {
-          err = err - dy;
-          x0 = x0 + sx;
-        }
-        if (e2 < dx) {
-          err = err + dx;
-          y0 = y0 + sy;
-        }
-      }
-      lastPoint = [x1, y1];
-    };
-    $(myCanvas).mousemove(drawLineOnMouseMove);
-    $(myCanvas).mousedown(drawLineOnMouseMove);
-
-    // Add callbacks that are fired any time the pixel data changes and adjusts the canvas appropriately.
-    // Note that child_added events will be fired for initial pixel data as well.
-    var drawPixel = function(snapshot) {
-      var coords = snapshot.name().split(":");
-      myContext.fillStyle = "#" + snapshot.val();
-      myContext.fillRect(parseInt(coords[0]) * pixSize, parseInt(coords[1]) * pixSize, pixSize, pixSize);
-    };
-    var clearPixel = function(snapshot) {
-      var coords = snapshot.name().split(":");
-      myContext.clearRect(parseInt(coords[0]) * pixSize, parseInt(coords[1]) * pixSize, pixSize, pixSize);
-    };
-    pixelDataRef.on('child_added', drawPixel);
-    pixelDataRef.on('child_changed', drawPixel);
-    pixelDataRef.on('child_removed', clearPixel);
-  });
-</script>
-</body>
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <!--<script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script> -->
+    </body>
 </html>
