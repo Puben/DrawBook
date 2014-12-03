@@ -68,8 +68,17 @@
       margin-left: 0px;
       margin-right: auto;
     }
+
+    #sizeholder{
+        width: 500px;
+        height: 30px;
+        border: 2px solid #424547;
+        margin-top: 5px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
 	
-    #drawing-canvas {
+    #canvas {
 	  border: 2px solid #c2c2c2;
       background-color: white;
     }
@@ -80,6 +89,14 @@
       margin: 1px;
       display: inline-block;
       border: 3px solid black;
+    }
+
+    .sizeBox {
+        width: 22px;
+        height: 22px;
+        margin: 1px;
+        display: inline-block;
+        border: 3px solid black;
     }
 	
 	.toolbox {
